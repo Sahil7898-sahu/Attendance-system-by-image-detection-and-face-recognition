@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body{font-family:Arial; background:#f4f6f9; display:flex; justify-content:center; align-items:center; height:100vh;}
+        .box{background:#fff; padding:40px; width:400px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.2);}
+        input, select{width:100%; padding:12px; margin:10px 0; box-sizing: border-box;}
+        button{width:100%; padding:12px; background:#0d9488; color:#fff; border:none; border-radius:6px; cursor:pointer;}
+        .register-btn{margin-top:10px; background:#fff; color:#0d9488; border:2px solid #0d9488;}
+        #msg{text-align:center; margin-top:10px;}
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2>Login</h2>
+    <select id="role"><option value="teacher">Teacher</option><option value="principal">Principal</option></select>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <button class="register-btn" onclick="goRegister()">Register</button>
+    <p id="msg"></p>
+</div>
+<script>
+async function login(){
+    const role = document.getElementById("role").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const msg = document.getElementById("msg");
+    msg.innerText = "Checking...";
+    try {
+        const res = await fetch("/api/login", {
+            method:"POST", headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({role, email, password})
+        });
+        const data = await res.json();
+        if(data.status === "success") {
+            msg.style.color="green"; msg.innerText="Success! Redirecting...";
+            setTimeout(() => { window.location.href = (data.role === "teacher" ? "/dashboard" : "/principal-dashboard"); }, 1000);
+        } else { msg.style.color="red"; msg.innerText=data.message; }
+    } catch(e) { msg.innerText="Server Error"; }
+}
+function goRegister(){
+    window.location.href = document.getElementById("role").value === "principal" ? "/principal-register" : "/teacher-register";
+}
+</script>
+</body>
+</html>

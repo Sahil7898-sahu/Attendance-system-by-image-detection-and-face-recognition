@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Teacher Registration</title>
+
+<style>
+:root{
+    --card:#ffffff;
+    --primary:#0d9488;
+    --text:#1f2933;
+    --muted:#6b7280;
+}
+*{box-sizing:border-box;}
+body{
+    font-family:Arial;
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+    height:100vh;margin:0;
+    display:flex;justify-content:center;align-items:center;
+}
+.box{
+    background:var(--card);
+    width:520px;padding:50px;
+    border-radius:16px;
+    box-shadow:0 25px 60px rgba(0,0,0,0.4);
+}
+h2{text-align:center;margin-bottom:8px;color:var(--text);}
+.subtitle{text-align:center;font-size:14px;color:var(--muted);margin-bottom:25px;}
+input{
+    width:100%;padding:12px;margin:8px 0;
+    border-radius:8px;border:1px solid #ddd;
+}
+button{
+    width:100%;padding:13px;margin-top:15px;
+    background:var(--primary);color:#fff;
+    border:none;border-radius:8px;
+    font-size:16px;cursor:pointer;
+}
+#msg{text-align:center;margin-top:15px;}
+.success{color:green;}
+.error{color:red;}
+.footer{text-align:center;margin-top:20px;}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>Teacher Registration</h2>
+<div class="subtitle">Create your Teacher Account</div>
+
+<form id="teacherRegisterForm">
+<input type="number" name="instituteCode" placeholder="Institute Code" required>
+<input type="text" name="teacherName" placeholder="Teacher Name" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="number" name="contact" placeholder="Contact Number" required>
+<input type="number" name="class_id" placeholder="Class" required>
+<input type="password" name="password" placeholder="Password" required>
+
+<button type="submit">Register</button>
+</form>
+
+<p id="msg"></p>
+
+<div class="footer">
+Already Registered?
+<a href="/?role=teacher">Login here</a>
+</div>
+
+</div>
+
+<script>
+document.getElementById("teacherRegisterForm").addEventListener("submit",function(e){
+    e.preventDefault();
+
+    fetch("/api/register/teacher",{
+        method:"POST",
+        body:new FormData(this)
+    })
+    .then(res=>res.text())
+    .then(data=>{
+        const msg=document.getElementById("msg");
+        if(data.trim()=="success"){
+            msg.innerText="Registration Successful! Redirecting...";
+            msg.className="success";
+
+            setTimeout(()=>{
+                window.location.href="/?role=teacher";
+            },1500);
+        }else{
+            msg.innerText=data;
+            msg.className="error";
+        }
+    });
+});
+</script>
+
+</body>
+</html>

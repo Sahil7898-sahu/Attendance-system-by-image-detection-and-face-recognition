@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+    <!-- Header -->
+    <div class="bg-slate-900 px-8 py-6 text-white">
+        <h2 class="text-2xl font-bold flex items-center">
+            <i class="fas fa-user-plus mr-3 text-blue-400"></i>
+            Student Biometric Enrollment
+        </h2>
+        <p class="text-slate-400 text-sm mt-1">Please fill in all official details and provide 5 clear facial photos.</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Full Name -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Full Name</label>
+                <input type="text" name="name" placeholder="John Doe" required 
+                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition">
+            </div>
+
+            <!-- Academic Year -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Academic Year</label>
+                <input type="text" name="academic_year" placeholder="2024-2025" required 
+                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition">
+            </div>
+
+            <!-- Class Name -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Class / Grade</label>
+                <select name="class_name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition">
+                    <option value="">Select Class</option>
+                    <option value="10th Grade">10th Grade</option>
+                    <option value="11th Grade">11th Grade</option>
+                    <option value="12th Grade">12th Grade</option>
+                </select>
+            </div>
+
+            <!-- Section -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Section</label>
+                <input type="text" name="section" placeholder="A, B or C" required 
+                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition">
+            </div>
+
+            <!-- Class ID -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Class ID (Unique)</label>
+                <input type="text" name="class_id" placeholder="CID-1001" required 
+                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition">
+            </div>
+
+            <!-- Teacher Name -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Assigned Teacher</label>
+                <input type="text" name="teacher_name" placeholder="Prof. Smith" required 
+                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition">
+            </div>
+
+            <!-- Phone No -->
+            <div class="md:col-span-2">
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Guardian Phone Number</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 font-bold">+</span>
+                    <input type="tel" name="phone_no" placeholder="1 234 567 890" required 
+                        class="w-full pl-8 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition">
+                </div>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="md:col-span-2">
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Facial Reference Images (Minimum 5)</label>
+                <div class="flex items-center justify-center w-full">
+                    <label class="flex flex-col w-full h-32 border-4 border-dashed border-slate-200 hover:bg-slate-50 hover:border-blue-300 group transition-all cursor-pointer">
+                        <div class="flex flex-col items-center justify-center pt-7">
+                            <i class="fas fa-images text-3xl text-slate-300 group-hover:text-blue-500 mb-2"></i>
+                            <p class="text-sm text-slate-500 group-hover:text-blue-600">Click to upload 5+ photos</p>
+                        </div>
+                        <input type="file" name="images" multiple min="5" required class="hidden" id="imageInput" onchange="checkFiles(this)" />
+                    </label>
+                </div>
+                <p id="fileCountLabel" class="text-sm text-slate-400 mt-2 italic text-center">No files selected (Minimum 5 required)</p>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1">
+            Register Student & Process Biometrics
+        </button>
+    </form>
+</div>
+
+<script>
+function checkFiles(input) {
+    const label = document.getElementById('fileCountLabel');
+    if (input.files.length < 5) {
+        label.innerHTML = `<span class="text-red-500 font-bold">Error: Only ${input.files.length} selected. Select at least 5!</span>`;
+        input.setCustomValidity("You must select at least 5 images.");
+    } else {
+        label.innerHTML = `<span class="text-green-600 font-bold">✓ ${input.files.length} images selected. Ready to go!</span>`;
+        input.setCustomValidity("");
+    }
+}
+</script>
+{% endblock %}
